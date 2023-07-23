@@ -6,7 +6,7 @@ import { DivContainerSection, DivContainerPhonebook } from './Styles/DivStyles';
 import { StyledH2 } from './Styles/TitleStyles';
 import { toast } from 'react-hot-toast';
 
-export class Contacts extends Component {
+export class ContactsTwo extends Component {
   state = {
     filter: '',
   };
@@ -45,7 +45,7 @@ export class Contacts extends Component {
         <DivContainerPhonebook>
           <ContactForm addContact={this.addContact} />
 
-          <StyledH2>Contacts</StyledH2>
+          <StyledH2>Contacts Two</StyledH2>
           <Filter filter={filter} setFilter={this.handleFilterChange} />
           <ContactList
             contacts={contacts}

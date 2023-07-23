@@ -1,7 +1,7 @@
 //app.jsx
 import React, { useState } from 'react'; // Importa useState
 import { DivContainer } from './Contacts/Styles/DivStyles';
-import Contacts from './Contacts/Contacts';
+import {Contacts} from './Contacts/Contacts';
 import { Toaster } from 'react-hot-toast';
 
 export const App = () => {
