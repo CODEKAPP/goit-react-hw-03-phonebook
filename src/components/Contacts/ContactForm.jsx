@@ -19,23 +19,36 @@ class ContactForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { name, number } = this.state;
-    const newContact = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: name,
-      number: number,
-    };
+    const isNameValid = name.trim().length >= 3;
+    const isNumberValid =
+      /^\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
+        number
+      );
 
-    this.props.addContact(newContact);
-    this.setState({
-      name: '',
-      number: '',
-    });
+    if (isNameValid && isNumberValid) {
+      const newContact = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: name,
+        number: number,
+      };
+
+      this.props.addContact(newContact);
+      this.setState({
+        name: '',
+        number: '',
+      });
+    } else {
+      alert('Please enter a valid name and number.');
+    }
   };
 
   render() {
     const { name, number } = this.state;
     const isNameValid = name.trim().length >= 3;
-    const isNumberValid = number.trim().length >= 4;
+    const isNumberValid =
+      /^\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
+        number
+      );
 
     return (
       <>
@@ -46,7 +59,7 @@ class ContactForm extends React.Component {
             type="text"
             name="name"
             placeholder="Monkey D'Luffy"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="El nombre puede contener solo letras, apóstrofe, guión y espacios. Por ejemplo Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
             value={name}

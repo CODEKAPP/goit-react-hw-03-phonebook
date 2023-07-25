@@ -1,4 +1,3 @@
-// Contacts.jsx
 import React, { Component } from 'react';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -14,9 +13,9 @@ class Contacts extends Component {
   };
 
   componentDidMount() {
-    const savedContacts = localStorage.getItem('contacts');
-    if (savedContacts) {
-      this.setState({ contacts: JSON.parse(savedContacts) });
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
     }
   }
 
@@ -27,8 +26,13 @@ class Contacts extends Component {
     }
   }
 
+  componentWillUnmount() {
+    // No necesitamos hacer nada aquí, pero es bueno tener en cuenta este ciclo de vida.
+  }
+
   addContact = newContact => {
-    const existingContact = this.state.contacts.find(
+    const { contacts } = this.state;
+    const existingContact = contacts.find(
       contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     );
 
@@ -38,20 +42,14 @@ class Contacts extends Component {
       this.setState(prevState => ({
         contacts: [...prevState.contacts, newContact],
       }));
-
       toast.success(`${newContact.name} has been added to contacts.`);
     }
   };
 
   deleteContact = id => {
-    const updatedContacts = this.state.contacts.filter(
-      contact => contact.id !== id
-    );
+    const { contacts } = this.state;
+    const updatedContacts = contacts.filter(contact => contact.id !== id);
     this.setState({ contacts: updatedContacts });
-  };
-
-  handleFilterChange = filter => {
-    this.setState({ filter });
   };
 
   render() {
@@ -65,12 +63,19 @@ class Contacts extends Component {
         <DivContainerPhonebook>
           <ContactForm addContact={this.addContact} />
 
-          <StyledH2>Contacts</StyledH2>
-          <Filter filter={filter} setFilter={this.handleFilterChange} />
-          <ContactList
-            contacts={filteredContacts}
-            deleteContact={this.deleteContact}
-          />
+          {contacts.length > 0 && (
+            <>
+              <StyledH2>Contacts</StyledH2>
+              <Filter
+                filter={filter}
+                setFilter={filter => this.setState({ filter })}
+              />
+              <ContactList
+                contacts={filteredContacts}
+                deleteContact={this.deleteContact}
+              />
+            </>
+          )}
         </DivContainerPhonebook>
       </DivContainerSection>
     );

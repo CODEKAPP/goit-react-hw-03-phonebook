@@ -7,10 +7,11 @@ export const FormStyleContainer = styled.form`
   justify-content: center;
   border: 1px black;
   gap: 8px;
-  padding: 10px;
+  padding: 25px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   width: 60%;
+  margin-bottom: 20px;
 `;
 export const FilterStyleContainer = styled(FormStyleContainer)`
   padding: 10px 10px 15px;
