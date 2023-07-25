@@ -1,3 +1,4 @@
+// Contacts.jsx
 import React, { Component } from 'react';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -6,39 +7,58 @@ import { DivContainerSection, DivContainerPhonebook } from './Styles/DivStyles';
 import { StyledH2 } from './Styles/TitleStyles';
 import { toast } from 'react-hot-toast';
 
-export class Contacts extends Component {
+class Contacts extends Component {
   state = {
+    contacts: [],
     filter: '',
   };
 
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    if (savedContacts) {
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+    if (prevState.contacts !== contacts) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
+
   addContact = newContact => {
-    const { contacts } = this.props;
-    const existingContact = contacts.find(
+    const existingContact = this.state.contacts.find(
       contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     );
 
     if (existingContact) {
-      // alert(`${newContact.name} is already in contacts.`);
       toast.error(`${newContact.name} is already in contacts.`);
     } else {
-      this.props.setContacts([...contacts, newContact]);
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, newContact],
+      }));
+
       toast.success(`${newContact.name} has been added to contacts.`);
     }
   };
 
   deleteContact = id => {
-    const { contacts, setContacts } = this.props;
-    const updatedContacts = contacts.filter(contact => contact.id !== id);
-    setContacts(updatedContacts);
+    const updatedContacts = this.state.contacts.filter(
+      contact => contact.id !== id
+    );
+    this.setState({ contacts: updatedContacts });
   };
 
-  handleFilterChange = e => {
-    this.setState({ filter: e.target.value });
+  handleFilterChange = filter => {
+    this.setState({ filter });
   };
 
   render() {
-    const { contacts } = this.props;
-    const { filter } = this.state;
+    const { contacts, filter } = this.state;
+    const filteredContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
 
     return (
       <DivContainerSection className="test">
@@ -48,18 +68,13 @@ export class Contacts extends Component {
           <StyledH2>Contacts</StyledH2>
           <Filter filter={filter} setFilter={this.handleFilterChange} />
           <ContactList
-            contacts={contacts}
-            filter={filter}
+            contacts={filteredContacts}
             deleteContact={this.deleteContact}
           />
         </DivContainerPhonebook>
       </DivContainerSection>
     );
   }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.contacts !== this.props.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.props.contacts));
-    }
-  }
 }
+
+export default Contacts;

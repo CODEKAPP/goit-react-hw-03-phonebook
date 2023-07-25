@@ -1,4 +1,4 @@
-// Filtre.jsx
+// Filter.jsx
 import React from 'react';
 import { FilterStyleContainer } from './Styles/FormStyles';
 import { InputStyle } from './Styles/InputStyle';
@@ -14,8 +14,8 @@ const Filter = ({ filter, setFilter }) => {
       <LabelStyle htmlFor="filter">Find contacts by name</LabelStyle>
       <InputStyle
         type="text"
-        placeholder='Search..'
         name="filter"
+        placeholder="Search..."
         value={filter}
         onChange={handleFilterChange}
       />

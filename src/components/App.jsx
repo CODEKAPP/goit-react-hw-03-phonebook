@@ -1,25 +1,20 @@
-//app.jsx
-import React, { useState } from 'react'; // Importa useState
+// App.jsx
+import React from 'react';
 import { DivContainer } from './Contacts/Styles/DivStyles';
-import {Contacts} from './Contacts/Contacts';
+import Contacts from './Contacts/Contacts';
 import { Toaster } from 'react-hot-toast';
 
-export const App = () => {
-  // Función para cargar los contactos desde localStorage
-  const loadContactsFromLocalStorage = () => {
-    const storedContacts = JSON.parse(localStorage.getItem('contacts'));
-    return storedContacts || [];
-  };
+class App extends React.Component {
+  render() {
+    return (
+      <section>
+        <DivContainer>
+          <Contacts />
+        </DivContainer>
+        <Toaster /> {/* Agrega el componente Toaster */}
+      </section>
+    );
+  }
+}
 
-  const [contacts, setContacts] = useState(loadContactsFromLocalStorage());
-
-  return (
-    <section>
-      <DivContainer>
-        <Contacts contacts={contacts} setContacts={setContacts} />{' '}
-        {/* Pasamos contacts y setContacts como props */}
-      </DivContainer>
-      <Toaster />
-    </section>
-  );
-};
+export default App;
